@@ -8,10 +8,13 @@ using OdeToFood;
 using OdeToFood.Controllers;
 
 namespace OdeToFood.Tests.Controllers {
+
     [TestClass]
     public class HomeControllerTest {
+
         [TestMethod]
         public void Index() {
+
             // Arrange
             HomeController controller = new HomeController();
 
@@ -20,10 +23,12 @@ namespace OdeToFood.Tests.Controllers {
 
             // Assert
             Assert.IsNotNull(result);
+
         }
 
         [TestMethod]
         public void About() {
+
             // Arrange
             HomeController controller = new HomeController();
 
@@ -32,10 +37,12 @@ namespace OdeToFood.Tests.Controllers {
 
             // Assert
             Assert.AreEqual("Your application description page.", result.ViewBag.Message);
+
         }
 
         [TestMethod]
         public void Contact() {
+
             // Arrange
             HomeController controller = new HomeController();
 
@@ -45,5 +52,7 @@ namespace OdeToFood.Tests.Controllers {
             // Assert
             Assert.IsNotNull(result);
         }
+
     }
+
 }
