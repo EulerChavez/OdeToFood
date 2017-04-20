@@ -9,55 +9,56 @@ namespace OdeToFood.Controllers {
 
     public class ReviewsController : Controller {
 
-        // GET: Reviews
-        public ActionResult Index() {
+        OdeToFoodDb _db = new OdeToFoodDb();
 
-            var model = _reviews.OrderBy(r => r.Country).ToList();
+        //[ChildActionOnly]
+        //public ActionResult BestReview() {
+
+        //    var review = _reviews.OrderByDescending(r => r.Rating).FirstOrDefault();
+
+        //    return PartialView("_Review", review);
+
+        //}
+
+        // GET: Reviews/restaurantId
+        public ActionResult Index([Bind(Prefix = "id")]int restaurantId) {
+
+            var model = _db.Restaurants
+                           .Find(restaurantId);
+
+            if (model != null)
+                return View(model);
+
+            return HttpNotFound();
+
+        }
+
+        [HttpGet]
+        public ActionResult Create(int restaurantId) {
+
+            return View();
+
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id) {
+
+            var model = _db.Reviews.Find(id);
 
             return View(model);
 
         }
 
-        // GET: Reviews/Details/5
-        public ActionResult Details(int id) {
-            return View();
-        }
-
-        // GET: Reviews/Create
-        public ActionResult Create() {
-            return View();
-        }
-
-        // POST: Reviews/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection) {
-            try {
-                // TODO: Add insert logic here
+        public ActionResult Edit([Bind(Exclude = "ReviewerName")]RestaurantReview review) {
 
-                return RedirectToAction("Index");
-            } catch {
-                return View();
-            }
-        }
+            if (ModelState.IsValid) {
 
-        // GET: Reviews/Edit/5
-        public ActionResult Edit(int id) {
+                _db.Entry(review).State = System.Data.Entity.EntityState.Modified;
 
-            var review = _reviews.Single(r => r.Id == id);
+                _db.SaveChanges();
 
-            return View(review);
-
-        }
-
-        // POST: Reviews/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection) {
-
-            var review = _reviews.Single(r => r.Id == id);
-
-            if (TryUpdateModel(review)) {
-
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = review.RestaurantId });
 
             }
 
@@ -65,30 +66,33 @@ namespace OdeToFood.Controllers {
 
         }
 
-        // GET: Reviews/Delete/5
-        public ActionResult Delete(int id) {
-            return View();
-        }
-
-        // POST: Reviews/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection) {
-            try {
-                // TODO: Add delete logic here
+        public ActionResult Create(RestaurantReview review) {
 
-                return RedirectToAction("Index");
-            } catch {
-                return View();
+            if (ModelState.IsValid) {
+
+                _db.Reviews.Add(review);
+
+                _db.SaveChanges();
+
+                return RedirectToAction("Index", new { id = review.RestaurantId });
+
             }
+
+            return View(review);
+
         }
 
-        static List<RestaurantReview> _reviews = new List<RestaurantReview>() {
 
-            new RestaurantReview{Id = 1, Name = "Cinnamon Club", City = "London", Country = "UK", Rating = 10 },
-            new RestaurantReview{Id = 2, Name = "Marrakesh", City = "D.C", Country = "USA", Rating = 10 },
-            new RestaurantReview{Id = 3, Name = "The House of Eliot", City = "Ghent", Country = "Belgium", Rating = 10 }
+        protected override void Dispose(bool disposing) {
 
-        };
+            if (disposing) {
+                _db.Dispose();
+            }
+
+            base.Dispose(disposing);
+
+        }
 
     }
 
