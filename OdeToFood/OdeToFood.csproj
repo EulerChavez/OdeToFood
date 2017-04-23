@@ -196,6 +196,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationMigrations\201704230246063_InitialCreate.cs" />
+    <Compile Include="ApplicationMigrations\201704230246063_InitialCreate.Designer.cs">
+      <DependentUpon>201704230246063_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationMigrations\ConfigurationMigrations.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -368,6 +373,9 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ApplicationMigrations\201704230246063_InitialCreate.resx">
+      <DependentUpon>201704230246063_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704191800496_InitialCreate.resx">
       <DependentUpon>201704191800496_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
